@@ -32,6 +32,7 @@ A Flask-based web app that recommends recipes based on ingredients you have, usi
 ├── nutrition.py           # Nutrition API fetch logic
 ├── utils.py               # Ingredient/instruction parsing
 ├── config.py              # Constants and environment paths
+├── testyy.ipynb           # Dataset manipulations 
 ├── data/
 │   └── recipes.parquet    # Recipe dataset
 ├── models/
