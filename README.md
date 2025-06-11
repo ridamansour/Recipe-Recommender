@@ -136,7 +136,9 @@ polars
 
 ## 📸 Screenshots
 
-> *Include UI screenshots of the input page and recommendations page.*
+
+<img src="./screenshots/Smart Recipe Recommender.png" alt="Recipe Recommender Home page" width="1000"/>
+<img src="./screenshots/Recipe Recommendations.png" alt="Recommendaions" width="1000"/>
 
 ---
 
