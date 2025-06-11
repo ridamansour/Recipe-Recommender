@@ -9,10 +9,12 @@ recipes_df: pl.DataFrame = pl.read_parquet("data/recipes.parquet")
 
 # Load or create the TF-IDF vectorizer and matrix
 if os.path.exists(MODEL_PATH) and os.path.exists(MATRIX_PATH):
+    print(f"Loaded {MODEL_PATH}")
     # Load the pre-trained model and matrix
     vectorizer = joblib.load(MODEL_PATH)
     tfidf_matrix = joblib.load(MATRIX_PATH)
 else:
+    print(f"Vectorizing TF-IDF {MODEL_PATH}")
     # Preprocess ingredients
     recipes_df = recipes_df.with_columns(
         (pl.col("ingredients") + " " + pl.col("NER")).str.to_lowercase().alias("ingredients_processed")
