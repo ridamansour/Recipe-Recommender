@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Recipe Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Smart Recipe Recommender</h1>
+            <p>Find the perfect recipes based on your ingredients and preferences.</p>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Add Food Form -->
+        <div class="card">
+            <h2>Add Food Items</h2>
+            <form action="{{ url_for('add_food') }}" method="POST" class="food-form">
+                <input type="text" id="food_item" name="food_item" placeholder="e.g., chicken, broccoli" required>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+
+        <!-- Main Content: Two Columns -->
+        <div class="main-content">
+            <!-- Left Column: Your Food Items -->
+            <div class="column">
+                <div class="card">
+                    <h2>Your Food Items</h2>
+                    <form action="{{ url_for('remove_food') }}" method="POST">
+                        <table class="food-table">
+                            <thead>
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Food Item</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in food_items %}
+                                    <tr>
+                                        <td><input type="checkbox" name="food_items" value="{{ item['food_item'] }}"></td>
+                                        <td>{{ item["food_item"] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn-remove">Remove Selected</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Filter Recipes -->
+            <div class="column">
+                <div class="card">
+                    <h2>Filter Recipes</h2>
+                    <form action="{{ url_for('recommend') }}" method="POST" class="tag-filter-form">
+                        <!-- Collapsible Meal Courses Section -->
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible">
+                                <h3>Meal Courses</h3>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="content">
+                                <div class="tag-options">
+                                    {% for tag in meal_course_tags %}
+                                        <label class="tag-option">
+                                            <input type="checkbox" id="meal_{{ tag }}" name="meal_course_tags" value="{{ tag }}">
+                                            <span class="tag-label">{{ tag }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Collapsible Dietary Preferences Section -->
+                        <div class="collapsible-section">
+                            <button type="button" class="collapsible">
+                                <h3>Dietary Preferences</h3>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="content">
+                                <div class="tag-options">
+                                    {% for tag in dietary_tags %}
+                                        <label class="tag-option">
+                                            <input type="checkbox" id="diet_{{ tag }}" name="dietary_tags" value="{{ tag }}">
+                                            <span class="tag-label">{{ tag }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recommend Recipes Button -->
+                        <button type="submit" class="btn-recommend">Get Recipe Recommendations</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Collapsible Sections -->
+    <script>
+        // Get all collapsible buttons
+        const collapsibles = document.querySelectorAll(".collapsible");
+
+        // Add click event listeners to each collapsible button
+        collapsibles.forEach((collapsible) => {
+            collapsible.addEventListener("click", function () {
+                // Toggle the "active" class to change the arrow and style
+                this.classList.toggle("active");
+
+                // Get the content section
+                const content = this.nextElementSibling;
+
+                // Toggle the visibility of the content
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

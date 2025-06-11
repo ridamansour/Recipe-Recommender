@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Recipe Recommendations</h1>
+
+        <a href="{{ url_for('home') }}" class="btn-back">← Back to Ingredients</a>
+
+        <div class="recipe-cards">
+            {% for recipe in recipes %}
+                <div class="recipe-card">
+                    <h2 class="recipe-title">{{ recipe.name }}</h2>
+
+                    <!-- Display Meal Type and Dietary Tags -->
+                    <div class="recipe-tags">
+                        <div class="tag-section">
+                            <h4>Meal Type:</h4>
+                            <div class="tags">
+                                {% for tag in recipe.meal_tags %}
+                                    <span class="tag meal-tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="tag-section">
+                            <h4>Dietary:</h4>
+                            <div class="tags">
+                                {% for tag in recipe.diet_tags %}
+                                    <span class="tag diet-tag">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Display Match Score -->
+                    <div class="recipe-score">
+                        <div class="score-label">Match Score:</div>
+                        <div class="score-value">{{ (recipe.similarity * 100)|round(1) }}%</div>
+                    </div>
+
+                    <!-- Ingredients Section -->
+                    <div class="recipe-section">
+                        <button type="button" class="collapsible">
+                            <h3>Ingredients</h3>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="content">
+                            <div class="ingredients-box">
+                                {% if recipe.ingredients is iterable %}
+                                    <ul>
+                                        {% for ingredient in recipe.ingredients %}
+                                            <li>{{ ingredient }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p>Ingredients information not available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Instructions Section -->
+                    <div class="recipe-section instructions">
+                        <button type="button" class="collapsible">
+                            <h3>Instructions</h3>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="content">
+                            {% if recipe.instructions is iterable %}
+                                <ol>
+                                    {% for step in recipe.instructions %}
+                                        <li>{{ step }}</li>
+                                    {% endfor %}
+                                </ol>
+                            {% else %}
+                                <p>Instructions not available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Nutrition Facts Section -->
+                    <div class="recipe-section nutrition">
+                        <button type="button" class="collapsible">
+                            <h3>Nutrition Facts</h3>
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="content">
+                            <div class="nutrition-grid">
+                                <div class="nutrition-item">
+                                    <span class="label">Calories:</span>
+                                    <span class="value">{{ recipe.nutrition.calories }}</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <span class="label">Protein:</span>
+                                    <span class="value">{{ recipe.nutrition.protein_g }}g</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <span class="label">Carbs:</span>
+                                    <span class="value">{{ recipe.nutrition.carbohydrates_total_g }}g</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <span class="label">Fat:</span>
+                                    <span class="value">{{ recipe.nutrition.fat_total_g }}g</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <span class="label">Fiber:</span>
+                                    <span class="value">{{ recipe.nutrition.fiber_g }}g</span>
+                                </div>
+                                <div class="nutrition-item">
+                                    <span class="label">Sugar:</span>
+                                    <span class="value">{{ recipe.nutrition.sugar_g }}g</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Display Recipe Source -->
+                    {% if recipe.source %}
+                        <div class="recipe-source">
+                            Source: <a href="https://{{ recipe.link }}" target="_blank">{{ recipe.source }}</a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- JavaScript for Collapsible Sections -->
+    <script>
+        // Get all collapsible buttons
+        const collapsibles = document.querySelectorAll(".collapsible");
+
+        // Add click event listeners to each collapsible button
+        collapsibles.forEach((collapsible) => {
+            collapsible.addEventListener("click", function () {
+                // Toggle the "active" class to change the arrow and style
+                this.classList.toggle("active");
+
+                // Get the content section
+                const content = this.nextElementSibling;
+
+                // Toggle the visibility of the content
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
