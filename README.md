@@ -9,6 +9,9 @@ A Flask-based web app that recommends recipes based on ingredients you have, usi
 - 🧾 **Smart Recipe Matching**  
   Uses TF-IDF to recommend recipes based on ingredient similarity.
 
+- 📊 **Massive Dataset**  
+  Backed by a dataset of **over 2 million recipes**, enabling diverse and accurate suggestions.
+
 - 🧂 **Ingredient Parsing**  
   Parses and normalizes ingredients to enhance match accuracy.
 
